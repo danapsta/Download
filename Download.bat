@@ -47,7 +47,7 @@ echo $DownloadAndRunMigrationButton.Add_Click({ >> %psScript%
 echo     DownloadScript "https://github.com/danapsta/Migration/archive/refs/heads/main.zip" "Migration.zip" "Migration-main" >> %psScript%
 echo     Start-Process "$env:USERPROFILE\Desktop\Download-export.bat" >> %psScript%
 echo }) >> %psScript%
-$form.Controls.Add($DownloadAndRunMigrationButton) >> %psScript%
+echo $form.Controls.Add($DownloadAndRunMigrationButton) >> %psScript%
 
 echo function DownloadScript($url, $zipName, $folderName){ >> %psScript%
 echo     $desktop = [Environment]::GetFolderPath("Desktop") >> %psScript%
@@ -55,7 +55,7 @@ echo     Invoke-WebRequest -Uri $url -OutFile "$desktop\$zipName" >> %psScript%
 echo     Add-Type -AssemblyName System.IO.Compression.FileSystem >> %psScript%
 echo     [System.IO.Compression.ZipFile]::ExtractToDirectory("$desktop\$zipName", "$desktop") >> %psScript%
 echo     Remove-Item "$desktop\$zipName" >> %psScript%
-echo     Get-ChildItem -Path "$desktop\$folderName" | Move-Item -Destination $desktop >> %psScript%
+echo     Get-ChildItem -Path "$desktop\$folderName" ^| Move-Item -Destination $desktop >> %psScript%
 echo     Remove-Item "$desktop\$folderName" -recurse -force >> %psScript%
 echo } >> %psScript%
 
@@ -65,4 +65,4 @@ echo $form.ShowDialog() >> %psScript%
 powershell -ExecutionPolicy Bypass -File "%psScript%"
 
 :: optional: remove the PS script
-:: del /F /Q "%psScript%"
+ del /F /Q "%psScript%"
