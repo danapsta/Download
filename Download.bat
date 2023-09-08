@@ -1,56 +1,73 @@
 @echo off
-setlocal enabledelayedexpansion
 
-:title
-cls
-echo =====================================
-echo            Main Menu
-echo =====================================
-echo 1. Download Deployment Script
-echo 2. Download (and run) Deployment Script
-echo 3. Download Migration Script
-echo 4. Download and Run Migration Script
-echo =====================================
-echo Enter your choice:
-set /p choice=""
+:: set filename for temporary PS script
+set psScript=%~dpn0.ps1
 
-if !choice! lss 1 if !choice! gtr 4 (
-    echo Invalid choice
-    pause
-    goto title
-)
+:: create the PS script
+(
+echo $[char]34
+Add-Type -AssemblyName System.Windows.Forms
 
-if !choice!==1 goto DownloadDeploy
-if !choice!==2 goto DownloadAndRunDeploy
-if !choice!==3 goto DownloadMigrate
-if !choice!==4 goto DownloadAndRunMigrate
+$form = New-Object System.Windows.Forms.Form 
+$form.Text = "Script Interface"
+$form.Size = New-Object System.Drawing.Size(300,200) 
+$form.StartPosition = "CenterScreen"
 
-:DownloadDeploy
-call :PowerShellFunction "Download" "https://github.com/danapsta/Deploy/archive/refs/heads/main.zip" "Deploy.zip" "Deploy-main"
-exit
+$DownloadDeployButton = New-Object System.Windows.Forms.Button
+$DownloadDeployButton.Location = New-Object System.Drawing.Point(50,30)
+$DownloadDeployButton.Size = New-Object System.Drawing.Size(200,30)
+$DownloadDeployButton.Text = "1. Download Deployment Script"
+$DownloadDeployButton.Add_Click({
+    DownloadScript "https://github.com/danapsta/Deploy/archive/refs/heads/main.zip" "Deploy.zip" "Deploy-main"
+})
+$form.Controls.Add($DownloadDeployButton)
 
-:DownloadAndRunDeploy
-call :PowerShellFunction "DownloadAndRun" "https://github.com/danapsta/Deploy/archive/refs/heads/main.zip" "Deploy.zip" "Deploy-main" "Deploy.bat"
-exit
+$DownloadAndRunDeployButton = New-Object System.Windows.Forms.Button
+$DownloadAndRunDeployButton.Location = New-Object System.Drawing.Point(50,70)
+$DownloadAndRunDeployButton.Size = New-Object System.Drawing.Size(200,30)
+$DownloadAndRunDeployButton.Text = "2. Download (and run) Deployment Script"
+$DownloadAndRunDeployButton.Add_Click({
+    DownloadScript "https://github.com/danapsta/Deploy/archive/refs/heads/main.zip" "Deploy.zip" "Deploy-main"
+    Start-Process "$env:USERPROFILE\Desktop\Deploy.bat"
+})
+$form.Controls.Add($DownloadAndRunDeployButton)
 
-:DownloadMigrate
-call :PowerShellFunction "Download" "https://github.com/danapsta/Migration/archive/refs/heads/main.zip" "Migration.zip" "Migration-main"
-exit
+$DownloadMigrationButton = New-Object System.Windows.Forms.Button
+$DownloadMigrationButton.Location = New-Object System.Drawing.Point(50,110)
+$DownloadMigrationButton.Size = New-Object System.Drawing.Size(200,30)
+$DownloadMigrationButton.Text = "3. Download Migration Script"
+$DownloadMigrationButton.Add_Click({
+    DownloadScript "https://github.com/danapsta/Migration/archive/refs/heads/main.zip" "Migration.zip" "Migration-main"
+})
+$form.Controls.Add($DownloadMigrationButton)
 
-:DownloadAndRunMigrate
-call :PowerShellFunction "DownloadAndRun" "https://github.com/danapsta/Migration/archive/refs/heads/main.zip" "Migration.zip" "Migration-main" "Download-export.bat"
-exit
+$DownloadAndRunMigrationButton = New-Object System.Windows.Forms.Button
+$DownloadAndRunMigrationButton.Location = New-Object System.Drawing.Point(50,150)
+$DownloadAndRunMigrationButton.Size = New-Object System.Drawing.Size(200,30)
+$DownloadAndRunMigrationButton.Text = "4. Download and Run Migration Script"
+$DownloadAndRunMigrationButton.Add_Click({
+    DownloadScript "https://github.com/danapsta/Migration/archive/refs/heads/main.zip" "Migration.zip" "Migration-main"
+    Start-Process "$env:USERPROFILE\Desktop\Download-export.bat"
+})
+$form.Controls.Add($DownloadAndRunMigrationButton)
 
-:PowerShellFunction
-powershell ^
-$Action, $Url, $ZipName, $FolderName, $BatName = $args; ^
-$desktop = [Environment]::GetFolderPath("Desktop"); ^
-Invoke-WebRequest -Uri $Url -OutFile "$desktop\$ZipName"; ^
-Add-Type -AssemblyName System.IO.Compression.FileSystem; ^
-[System.IO.Compression.ZipFile]::ExtractToDirectory("$desktop\$ZipName", "$desktop"); ^
-Remove-Item "$desktop\$ZipName"; ^
-Get-ChildItem -Path "$desktop\$FolderName" | Move-Item -Destination $desktop; ^
-Remove-Item "$desktop\$FolderName" -recurse -force; ^
-if ($Action -eq "DownloadAndRun") { Start-Process "$desktop\$BatName" }; ^
-Write-Output "Done."
-exit /b
+function DownloadScript($url, $zipName, $folderName){
+    $desktop = [Environment]::GetFolderPath("Desktop")
+    Invoke-WebRequest -Uri $url -OutFile "$desktop\$zipName"
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    [System.IO.Compression.ZipFile]::ExtractToDirectory("$desktop\$zipName", "$desktop")
+    Remove-Item "$desktop\$zipName"
+    Get-ChildItem -Path "$desktop\$folderName" | Move-Item -Destination $desktop
+    Remove-Item "$desktop\$folderName" -recurse -force
+}
+
+$form.ShowDialog()
+
+echo $[char]34
+) > "%psScript%"
+
+:: run the PS script
+powershell -ExecutionPolicy Bypass -File "%psScript%"
+
+:: optional: remove the PS script
+:: del /F /Q "%psScript%"
