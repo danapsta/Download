@@ -49,6 +49,7 @@ echo     Remove-Item "$desktop\$folderName" -recurse -force >> %psScript%
 echo } >> %psScript%
 
 echo $form.ShowDialog() >> %psScript%
+echo exit >> %psScript%
 
 :: run the PS script
 powershell -ExecutionPolicy Bypass -File "%psScript%"
