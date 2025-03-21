@@ -20,34 +20,23 @@ echo    DownloadScript "https://github.com/danapsta/Deploy/archive/refs/heads/ma
 echo }) >> %psScript%
 echo $form.Controls.Add($DownloadDeployButton) >> %psScript%
 
-echo $DownloadAndRunDeployButton = New-Object System.Windows.Forms.Button >> %psScript%
-echo $DownloadAndRunDeployButton.Location = New-Object System.Drawing.Point(50,70) >> %psScript%
-echo $DownloadAndRunDeployButton.Size = New-Object System.Drawing.Size(200,30) >> %psScript%
-echo $DownloadAndRunDeployButton.Text = "2. Download (and run) Deployment Script" >> %psScript%
-echo $DownloadAndRunDeployButton.Add_Click({ >> %psScript%
-echo     DownloadScript "https://github.com/danapsta/Deploy/archive/refs/heads/main.zip" "Deploy.zip" "Deploy-main" >> %psScript%
-echo     Start-Process "$env:USERPROFILE\Desktop\Deploy.bat" >> %psScript%
-echo }) >> %psScript%
-echo $form.Controls.Add($DownloadAndRunDeployButton) >> %psScript%
-
 echo $DownloadMigrationButton = New-Object System.Windows.Forms.Button >> %psScript%
 echo $DownloadMigrationButton.Location = New-Object System.Drawing.Point(50,110) >> %psScript%
 echo $DownloadMigrationButton.Size = New-Object System.Drawing.Size(200,30) >> %psScript%
-echo $DownloadMigrationButton.Text = "3. Download Migration Script" >> %psScript%
+echo $DownloadMigrationButton.Text = "2. Download Migration Script" >> %psScript%
 echo $DownloadMigrationButton.Add_Click({ >> %psScript%
 echo     DownloadScript "https://github.com/danapsta/Migration/archive/refs/heads/main.zip" "Migration.zip" "Migration-main" >> %psScript%
 echo }) >> %psScript%
 echo $form.Controls.Add($DownloadMigrationButton) >> %psScript%
 
-echo $DownloadAndRunMigrationButton = New-Object System.Windows.Forms.Button >> %psScript%   
-echo $DownloadAndRunMigrationButton.Location = New-Object System.Drawing.Point(50,150) >> %psScript%
-echo $DownloadAndRunMigrationButton.Size = New-Object System.Drawing.Size(200,30) >> %psScript%
-echo $DownloadAndRunMigrationButton.Text = "4. Download and Run Migration Script" >> %psScript%
-echo $DownloadAndRunMigrationButton.Add_Click({ >> %psScript%
-echo     DownloadScript "https://github.com/danapsta/Migration/archive/refs/heads/main.zip" "Migration.zip" "Migration-main" >> %psScript%
-echo     Start-Process "$env:USERPROFILE\Desktop\Download-export.bat" >> %psScript%
+echo $DownloadAuditButton = New-Object System.Windows.Forms.Button >> %psScript%
+echo $DownloadAuditButton.Location = New-Object System.Drawing.Point(50,150) >> %psScript%
+echo $DownloadAuditButton.Size = New-Object System.Drawing.Size(200,30) >> %psScript%
+echo $DownloadAuditButton.Text = "3. Download Audit Script" >> %psScript%
+echo $DownloadAuditButton.Add_Click({ >> %psScript%
+echo     DownloadScript "https://github.com/danapsta/Windows_Security_Audit/archive/refs/heads/main.zip" "Audit.zip" "Windows_Security_Audit-main" >> %psScript%
 echo }) >> %psScript%
-echo $form.Controls.Add($DownloadAndRunMigrationButton) >> %psScript%
+echo $form.Controls.Add($DownloadAuditButton) >> %psScript%
 
 echo function DownloadScript($url, $zipName, $folderName){ >> %psScript%
 echo     $desktop = [Environment]::GetFolderPath("Desktop") >> %psScript%
