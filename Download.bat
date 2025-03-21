@@ -44,7 +44,7 @@ echo     Invoke-WebRequest -Uri $url -OutFile "$desktop\$zipName" >> %psScript%
 echo     Add-Type -AssemblyName System.IO.Compression.FileSystem >> %psScript%
 echo     [System.IO.Compression.ZipFile]::ExtractToDirectory("$desktop\$zipName", "$desktop") >> %psScript%
 echo     Remove-Item "$desktop\$zipName" >> %psScript%
-echo     Get-ChildItem -Path "$desktop\$folderName" ^| Move-Item -Destination $desktop >> %psScript%
+echo     Copy-Item -Path "$desktop\$folderName\*" -Destination $desktop -Recurse -Force >> %psScript%
 echo     Remove-Item "$desktop\$folderName" -recurse -force >> %psScript%
 echo } >> %psScript%
 
