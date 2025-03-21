@@ -8,7 +8,7 @@ echo Add-Type -AssemblyName System.Windows.Forms > %psScript%
 
 echo $form = New-Object System.Windows.Forms.Form >> %psScript%
 echo $form.Text = "Script Interface" >> %psScript%
-echo $form.Size = New-Object System.Drawing.Size(300,200) >> %psScript% 
+echo $form.Size = New-Object System.Drawing.Size(300,250) >> %psScript% 
 echo $form.StartPosition = "CenterScreen" >> %psScript%
 
 echo $DownloadDeployButton = New-Object System.Windows.Forms.Button >> %psScript%
@@ -21,16 +21,16 @@ echo }) >> %psScript%
 echo $form.Controls.Add($DownloadDeployButton) >> %psScript%
 
 echo $DownloadMigrationButton = New-Object System.Windows.Forms.Button >> %psScript%
-echo $DownloadMigrationButton.Location = New-Object System.Drawing.Point(50,110) >> %psScript%
+echo $DownloadMigrationButton.Location = New-Object System.Drawing.Point(50,70) >> %psScript%
 echo $DownloadMigrationButton.Size = New-Object System.Drawing.Size(200,30) >> %psScript%
 echo $DownloadMigrationButton.Text = "2. Download Migration Script" >> %psScript%
 echo $DownloadMigrationButton.Add_Click({ >> %psScript%
-echo     DownloadScript "https://github.com/danapsta/Migration/archive/refs/heads/main.zip" "Migration.zip" "Migration-main" >> %psScript%
+echo     DownloadScript "https://github.com/danapsta/Migration/archive/refs/heads/master.zip" "Migration.zip" "Migration-master" >> %psScript%
 echo }) >> %psScript%
 echo $form.Controls.Add($DownloadMigrationButton) >> %psScript%
 
 echo $DownloadAuditButton = New-Object System.Windows.Forms.Button >> %psScript%
-echo $DownloadAuditButton.Location = New-Object System.Drawing.Point(50,150) >> %psScript%
+echo $DownloadAuditButton.Location = New-Object System.Drawing.Point(50,110) >> %psScript%
 echo $DownloadAuditButton.Size = New-Object System.Drawing.Size(200,30) >> %psScript%
 echo $DownloadAuditButton.Text = "3. Download Audit Script" >> %psScript%
 echo $DownloadAuditButton.Add_Click({ >> %psScript%
